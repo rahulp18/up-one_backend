@@ -16,7 +16,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(
   cors({
     credentials: true,
-    origin: process.env.ORIGIN,
+
     optionsSuccessStatus: 200,
   })
 );

@@ -10,6 +10,7 @@ const stafSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  number: String,
   experience: String,
   shopId: {
     type: mongoose.Types.ObjectId,

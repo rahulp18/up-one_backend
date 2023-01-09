@@ -5,11 +5,11 @@ import {
   getAllShops,
   getSingleShop,
   loginShop,
-  updateServices,
+  updateLocation,
   updateShop,
   verifyOtp,
 } from "../controllers/shop.js";
-import { checkAuth } from "../middlewares/checkAuth.js";
+import { CheckShop } from "../middlewares/CheckShopLogin.js";
 
 const routes = express.Router();
 
@@ -17,9 +17,10 @@ routes.post("/register", createShop);
 routes.post("/login", loginShop);
 routes.post("/verifyOtp", verifyOtp);
 routes.get("/", getAllShops);
-routes.put("/services/:id", checkAuth, updateServices);
-routes.put("/:shopId", checkAuth, updateShop);
-routes.get("/:shopId", checkAuth, getSingleShop);
-routes.delete("/:shopId", checkAuth, deleteShop);
+
+routes.put("/update", CheckShop, updateShop);
+routes.put("/location/update", CheckShop, updateLocation);
+routes.get("/:shopId", getSingleShop);
+routes.delete("/:shopId", CheckShop, deleteShop);
 
 export default routes;

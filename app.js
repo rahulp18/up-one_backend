@@ -6,20 +6,16 @@ import authRoutes from "./routes/auth.js";
 import shopRoutes from "./routes/shop.js";
 import userRoutes from "./routes/user.js";
 import serviceRoutes from "./routes/services.js";
+import stafRoutes from "./routes/staf.js";
 import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
 const app = express();
 dotEnv.config();
 app.use(cookieParser());
-app.use(express.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(
-  cors({
-    credentials: true,
+app.use(express.json({ limit: "50mb" }));
 
-    optionsSuccessStatus: 200,
-  })
-);
+app.use(cors());
+app.use(bodyParser.urlencoded({ extended: true }));
 const PORT = process.env.PORT || 5000;
 
 async function main() {
@@ -52,4 +48,5 @@ app.use("/api/auth", authRoutes);
 app.use("/api/shop", shopRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/service", serviceRoutes);
+app.use("/api/staf", stafRoutes);
 main();

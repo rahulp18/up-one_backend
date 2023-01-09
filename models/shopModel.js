@@ -14,7 +14,7 @@ const shopModel = new mongoose.Schema(
       unique: [true, "Number must be unique"],
     },
     phoneOtp: String,
-    image: {
+    images: {
       type: Array,
       default: [],
     },

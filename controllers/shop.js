@@ -1,14 +1,31 @@
 import Shop from "../models/shopModel.js";
 import { generateOtp, sendsmsOtp } from "../utils/otp.js";
 import { createJwtToken } from "../utils/token.js";
-
+import Cloudinary from "../utils/cloudinary.js";
 export const createShop = async (req, res) => {
   try {
+    // console.log(req.body);
     let { phone } = req.body;
     const shop = await Shop.findOne({ number: phone });
     if (shop) {
       return res.status(404).json({ message: "This Number is already used" });
     }
+    let images = [...req.body.images];
+    let imageBuffer = [];
+    console.log(images);
+    for (let i = 0; i < images.length; i++) {
+      const result = await Cloudinary.uploader.upload(images[i], {
+        folder: "shops",
+        crop: "scale",
+      });
+      imageBuffer.push({
+        public_id: result.public_id,
+        url: result.secure_url,
+      });
+    }
+    console.log(imageBuffer);
+    req.body.images = imageBuffer;
+
     const newShop = await Shop({ ...req.body, number: phone });
     await newShop.save();
     const otp = generateOtp(6);
@@ -26,6 +43,7 @@ export const createShop = async (req, res) => {
       },
     });
   } catch (error) {
+    console.log(error);
     res.status(404).json({ message: error.message });
   }
 };
@@ -113,25 +131,6 @@ export const deleteShop = async (req, res) => {
   }
 };
 
-export const updateServices = async (req, res) => {
-  try {
-    const updatedData = await Shop.update(
-      { "services._id": req.params.id },
-      {
-        $set: {
-          "services.$.name": req.body?.name,
-          "services.$.img": req.body?.img,
-          "services.$.price": req.body?.price,
-        },
-      },
-      { new: true }
-    );
-    res.status(200).json({ type: "success", data: "data updated" });
-  } catch (error) {
-    res.status(400).json({ type: "error", data: error.message });
-  }
-};
-
 export const getAllShops = async (req, res) => {
   try {
     const shops = await Shop.find();
@@ -139,4 +138,20 @@ export const getAllShops = async (req, res) => {
   } catch (error) {
     res.status(400).json({ type: "error", data: error.message });
   }
+};
+
+export const updateLocation = async (req, res) => {
+  try {
+    console.log(req.body);
+    const updatedLocation = await Shop.findByIdAndUpdate(
+      req.user,
+      {
+        "location.lat": req.body.location.lat,
+        "location.lng": req.body.location.lng,
+      },
+
+      { new: true }
+    );
+    return res.status(200).json({ type: "success", data: updatedLocation });
+  } catch (error) {}
 };

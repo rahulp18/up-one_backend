@@ -28,6 +28,9 @@ const shopModel = new mongoose.Schema(
       min: 0,
       max: 5,
     },
+    overview: {
+      type: String,
+    },
   },
   {
     timestamps: true,

@@ -1,6 +1,6 @@
 import User from "../models/userModel.js";
 import { generateOtp, sendsmsOtp } from "../utils/otp.js";
-import { createJwtToken } from "../utils/token.js";
+import { createJwtToken, verifyJwtToken } from "../utils/token.js";
 
 export const registerUser = async (req, res) => {
   try {
@@ -84,5 +84,15 @@ export const verifyOtp = async (req, res) => {
     });
   } catch (error) {
     res.status(404).json({ message: error.message });
+  }
+};
+
+export const verifyToken = async (req, res) => {
+  const result = verifyJwtToken(req.params.token);
+
+  if (result === "error") {
+    res.status(400).json("Token Expored");
+  } else {
+    res.status(200).json({ status: "success", message: "Token Valid" });
   }
 };

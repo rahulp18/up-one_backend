@@ -18,6 +18,11 @@ const serviceSchema = new mongoose.Schema({
     type: Array,
     default: [],
   },
+  status: {
+    type: String,
+    default: "active",
+    enum: ["active", "inactive"],
+  },
 });
 
 export default mongoose.model("Service", serviceSchema);

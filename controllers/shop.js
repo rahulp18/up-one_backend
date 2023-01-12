@@ -105,6 +105,7 @@ export const verifyOtp = async (req, res) => {
 };
 
 export const updateShop = async (req, res) => {
+  console.log(req.body);
   try {
     const shop = await Shop.findByIdAndUpdate(req.user, req.body, {
       new: true,
@@ -116,7 +117,7 @@ export const updateShop = async (req, res) => {
 };
 export const getSingleShop = async (req, res) => {
   try {
-    const shop = await Shop.findById(req.user);
+    const shop = await Shop.findById(req.params.shopId);
     res.status(200).json({ type: "success", data: shop });
   } catch (error) {
     res.status(404).json({ message: error.message });
@@ -153,5 +154,16 @@ export const updateLocation = async (req, res) => {
       { new: true }
     );
     return res.status(200).json({ type: "success", data: updatedLocation });
-  } catch (error) {}
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+};
+export const getShop = async (req, res) => {
+  try {
+    const shop = await Shop.findById(req.user);
+
+    res.status(200).json({ type: "success", data: shop });
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
 };

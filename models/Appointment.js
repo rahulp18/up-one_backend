@@ -4,7 +4,7 @@ const appointmentSchema = new mongoose.Schema(
   {
     name: String,
     email: String,
-    phone: Number,
+    phone: String,
     slots: { type: mongoose.Types.ObjectId, ref: "Slot" },
     status: {
       type: String,

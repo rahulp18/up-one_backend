@@ -1,6 +1,7 @@
 import Appointment from "../models/Appointment.js";
 import Slot from "../models/slot.js";
 import Service from "../models/services.js";
+import User from "../models/userModel.js";
 
 export const getAppointments = async (req, res) => {
   try {
@@ -68,5 +69,48 @@ export const getAllAppCli = async (req, res) => {
     res.status(200).json({ type: "success", data: data });
   } catch (error) {
     res.status(200).json(error.message);
+  }
+};
+
+export const addManully = async (req, res) => {
+  try {
+    const data = await User.findOne({ number: req.body.phone });
+    console.log(data);
+    var requestBody = req.body;
+    var newslot = new Slot({
+      slot_time: requestBody.slot_time,
+      slot_date: requestBody.slot_date,
+      shopId: requestBody.shopId,
+    });
+    await newslot.save();
+    var newappointment = new Appointment({
+      name: requestBody.name,
+      email: requestBody.email,
+      phone: requestBody.phone,
+      slots: newslot._id,
+      shopId: req.user,
+      services: requestBody.services,
+      stafId: requestBody.stafId,
+      userId: data ? data._id : null,
+    });
+    newappointment.save((err, saved) => {
+      Appointment.find({ _id: saved._id })
+        .populate("slots")
+        .exec((err, appointment) =>
+          res.status(200).json({ type: "success", data: appointment })
+        );
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(404).json({ type: "error", message: error.message });
+  }
+};
+
+export const getSlotInfo = async (req, res) => {
+  try {
+    const data = await Slot.findById(req.params.id);
+    res.status(200).json({ type: "success", data: data });
+  } catch (error) {
+    res.status(404).json({ type: "error", message: error.message });
   }
 };

@@ -49,7 +49,8 @@ export const createAppointment = async (req, res) => {
 
 export const updateAppointment = async (req, res) => {
   try {
-    const appoinemts = await Appointment.findOneAndUpdate(
+    console.log(req.body, req.params.id);
+    const appoinemts = await Appointment.findByIdAndUpdate(
       req.params.id,
       { status: req.body.status },
       { new: true }

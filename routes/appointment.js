@@ -14,6 +14,6 @@ router.get("/appointments/:status", CheckShop, getAppointments);
 router.get("/appointments", checkAuth, getAllAppCli);
 router.post("/retriveSlots/:shopId", slotController);
 router.post("/appointmentCreate", createAppointment);
-router.put("/appointments/:id", updateAppointment);
+router.put("/appointments/update/:id", updateAppointment);
 
 export default router;

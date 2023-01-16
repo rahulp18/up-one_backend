@@ -26,8 +26,7 @@ const userSchema = new mongoose.Schema(
     },
     phoneOtp: String,
     location: {
-      lat: String,
-      lng: String,
+      type: String,
     },
   },
   {

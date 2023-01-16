@@ -19,8 +19,7 @@ const shopModel = new mongoose.Schema(
       default: [],
     },
     location: {
-      lat: String,
-      lng: String,
+      type: String,
     },
 
     rating: {

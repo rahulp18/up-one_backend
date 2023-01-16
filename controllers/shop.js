@@ -147,8 +147,7 @@ export const updateLocation = async (req, res) => {
     const updatedLocation = await Shop.findByIdAndUpdate(
       req.user,
       {
-        "location.lat": req.body.location.lat,
-        "location.lng": req.body.location.lng,
+        location: req.body.location,
       },
 
       { new: true }

@@ -2,6 +2,7 @@ import Shop from "../models/shopModel.js";
 import { generateOtp, sendsmsOtp } from "../utils/otp.js";
 import { createJwtToken } from "../utils/token.js";
 import Cloudinary from "../utils/cloudinary.js";
+import { sendSMS } from "../utils/sendSms.js";
 export const createShop = async (req, res) => {
   try {
     // console.log(req.body);
@@ -31,10 +32,15 @@ export const createShop = async (req, res) => {
     const otp = generateOtp(6);
     newShop.phoneOtp = otp;
     await newShop.save();
-    sendsmsOtp({
-      number: newShop.number,
-      message: `Your OTP is ${otp}`,
-    });
+    // sendsmsOtp({
+    //   number: newShop.number,
+    //   message: `Your OTP is ${otp}`,
+    // });
+    sendSMS(
+      newShop.number.substring(3, newShop.number.length),
+      newShop.number.substring(0, 3),
+      otp
+    );
     res.status(200).json({
       type: "success",
       message: "Account created OTP sended to mobile number",
@@ -58,10 +64,15 @@ export const loginShop = async (req, res) => {
     const otp = generateOtp(6);
     shop.phoneOtp = otp;
     await shop.save();
-    sendsmsOtp({
-      number: shop.number,
-      message: `Your OTP is ${otp}`,
-    });
+    // sendsmsOtp({
+    //   number: shop.number,
+    //   message: `Your OTP is ${otp}`,
+    // });
+    sendSMS(
+      shop.number.substring(3, shop.number.length),
+      shop.number.substring(0, 3),
+      otp
+    );
     res.status(201).json({
       type: "success",
       message: "OTP sended to registerd mobile phone successfully",

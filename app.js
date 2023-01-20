@@ -36,7 +36,7 @@ async function main() {
 app.get("/", (req, res) => {
   res.status(200).json({
     type: "success",
-    message: "server is up and running",
+    message: "server is up and running Ok",
     data: null,
   });
 });

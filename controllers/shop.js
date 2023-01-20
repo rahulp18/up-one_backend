@@ -159,6 +159,10 @@ export const updateLocation = async (req, res) => {
       req.user,
       {
         location: req.body.location,
+        geo: {
+          lat: req.body.geo.lat,
+          lng: req.body.geo.lng,
+        },
       },
 
       { new: true }

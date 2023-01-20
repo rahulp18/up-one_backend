@@ -28,6 +28,10 @@ const userSchema = new mongoose.Schema(
     location: {
       type: String,
     },
+    geo: {
+      lat: Number,
+      lng: Number,
+    },
   },
   {
     timestamps: true,

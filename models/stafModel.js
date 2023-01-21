@@ -7,8 +7,8 @@ const stafSchema = new mongoose.Schema({
     trim: true,
   },
   image: {
-    type: String,
-    required: true,
+    url: String,
+    public_id: String,
   },
   number: String,
   experience: String,
@@ -29,6 +29,7 @@ const stafSchema = new mongoose.Schema({
     trim: true,
     default: "working",
   },
+  public_id: String,
 });
 
 export default mongoose.model("Staf", stafSchema);

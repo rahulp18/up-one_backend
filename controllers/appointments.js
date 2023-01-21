@@ -2,6 +2,8 @@ import Appointment from "../models/Appointment.js";
 import Slot from "../models/slot.js";
 import Service from "../models/services.js";
 import User from "../models/userModel.js";
+import Shop from "../models/shopModel.js";
+import { sendConfirmSms } from "../utils/sendSms.js";
 
 export const getAppointments = async (req, res) => {
   try {
@@ -35,6 +37,8 @@ export const createAppointment = async (req, res) => {
       stafId: requestBody.stafId,
       userId: requestBody.userId,
     });
+    const shopUser = await Shop.findById(requestBody.shopId);
+
     newappointment.save((err, saved) => {
       Appointment.find({ _id: saved._id })
         .populate("slots")
@@ -42,6 +46,17 @@ export const createAppointment = async (req, res) => {
           res.status(200).json({ type: "success", data: appointment })
         );
     });
+
+    sendConfirmSms(
+      shopUser.number.substring(3, shopUser.number.length),
+      shopUser.number.substring(0, 3),
+      "Check your Appointment Request someone book a new appointment"
+    );
+    sendConfirmSms(
+      requestBody.phone.substring(3, requestBody.phone.length),
+      requestBody.phone.substring(0, 3),
+      "Congratulations your appointment request has been successfully submitted"
+    );
   } catch (error) {
     console.log(error);
     res.status(404).json({ type: "error", message: error.message });
@@ -100,6 +115,12 @@ export const addManully = async (req, res) => {
           res.status(200).json({ type: "success", data: appointment })
         );
     });
+
+    sendConfirmSms(
+      data.number.substring(3, data.number.length),
+      data.number.substring(0, 3),
+      "Congratulations your appointment request has been successfully submitted"
+    );
   } catch (error) {
     console.log(error);
     res.status(404).json({ type: "error", message: error.message });

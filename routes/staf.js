@@ -2,6 +2,7 @@ import express from "express";
 import {
   addStaf,
   deleteStaf,
+  editImage,
   geStafBySalon,
   getActiveStafs,
   getAllStaf,
@@ -18,5 +19,6 @@ routes.get("/:id", getSingleStaf);
 routes.get("/", CheckShop, getAllStaf);
 routes.get("/saloon/active", CheckShop, getActiveStafs);
 routes.get("/client/active/:shopId", geStafBySalon);
+routes.put("/image/edit/:stafId", editImage);
 
 export default routes;

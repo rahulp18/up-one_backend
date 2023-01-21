@@ -12,9 +12,11 @@ const userSchema = new mongoose.Schema(
       required: [true, "Number must be provided"],
       unique: [true, "Number must be unique"],
     },
-    profileImage: {
-      type: String,
+    image: {
+      url: String,
+      public_id: String,
     },
+
     email: {
       type: String,
       trim: true,

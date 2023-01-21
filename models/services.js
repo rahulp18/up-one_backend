@@ -15,8 +15,8 @@ const serviceSchema = new mongoose.Schema({
     required: true,
   },
   image: {
-    type: Array,
-    default: [],
+    url: String,
+    public_id: String,
   },
   status: {
     type: String,

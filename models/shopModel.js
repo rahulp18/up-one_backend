@@ -33,6 +33,9 @@ const shopModel = new mongoose.Schema(
     overview: {
       type: String,
     },
+    email: {
+      type: String,
+    },
   },
   {
     timestamps: true,

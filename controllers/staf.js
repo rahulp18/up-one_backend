@@ -1,5 +1,6 @@
 import Staf from "../models/stafModel.js";
 import Cloudinary from "../utils/cloudinary.js";
+import { destroyImage } from "../utils/uploadImages.js";
 export const addStaf = async (req, res) => {
   try {
     const result = await Cloudinary.uploader.upload(req.body.image, {
@@ -9,8 +10,11 @@ export const addStaf = async (req, res) => {
     const newStaf = await Staf({
       ...req.body,
       name: req.body.name,
-      image: result.secure_url,
-      shopId: req.user,
+      image: {
+        url: result.secure_url,
+        public_id: result.public_id,
+      },
+      shopId: req.user._id,
     });
     await newStaf.save();
     res.status(200).json({ type: "success", data: newStaf });
@@ -46,7 +50,7 @@ export const getSingleStaf = async (req, res) => {
 };
 export const getAllStaf = async (req, res) => {
   try {
-    const staf = await Staf.find({ shopId: req.user });
+    const staf = await Staf.find({ shopId: req.user._id });
     res.status(200).json({ type: "success", data: staf });
   } catch (error) {
     res.status(404).json({ message: error.message });
@@ -55,7 +59,7 @@ export const getAllStaf = async (req, res) => {
 
 export const getActiveStafs = async (req, res) => {
   try {
-    const stafs = await Staf.find({ status: "working", shopId: req.user });
+    const stafs = await Staf.find({ status: "working", shopId: req.user._id });
     res.status(200).json({ type: "success", data: stafs });
   } catch (error) {
     res.status(404).json({ message: error.message });
@@ -68,6 +72,34 @@ export const geStafBySalon = async (req, res) => {
       shopId: req.params.shopId,
     });
     res.status(200).json({ type: "success", data: stafs });
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+};
+
+export const editImage = async (req, res) => {
+  console.log(req.body);
+  try {
+    destroyImage(req.body.oldImage);
+    const result = await Cloudinary.uploader.upload(req.body.newImage, {
+      folder: "stafs",
+      crop: "scale",
+    });
+    const data = await Staf.findByIdAndUpdate(
+      req.params.stafId,
+      {
+        image: {
+          url: result.secure_url,
+          public_id: result.public_id,
+        },
+      },
+      { new: true }
+    );
+
+    res.status(200).json({
+      status: "success",
+      data: data,
+    });
   } catch (error) {
     res.status(404).json({ message: error.message });
   }

@@ -116,9 +116,9 @@ export const verifyOtp = async (req, res) => {
 };
 
 export const updateShop = async (req, res) => {
-  console.log(req.body);
+  console.log(req.user);
   try {
-    const shop = await Shop.findByIdAndUpdate(req.user, req.body, {
+    const shop = await Shop.findByIdAndUpdate(req.user._id, req.body, {
       new: true,
     });
     res.status(200).json({ type: "success", data: shop });

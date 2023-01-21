@@ -7,3 +7,9 @@ export const upload = async (folder, image) => {
   });
   return result;
 };
+
+export const destroyImage = async (image) => {
+  Cloudinary.uploader.destroy(image, function (error, result) {
+    console.log(result, error);
+  });
+};

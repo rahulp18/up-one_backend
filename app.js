@@ -10,6 +10,7 @@ import stafRoutes from "./routes/staf.js";
 import appointmentRoutes from "./routes/appointment.js";
 import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
+import { sendConfirmSms } from "./utils/sendSms.js";
 const app = express();
 dotEnv.config();
 app.use(cookieParser());

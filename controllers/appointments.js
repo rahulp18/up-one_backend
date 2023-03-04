@@ -4,6 +4,7 @@ import Service from "../models/services.js";
 import User from "../models/userModel.js";
 import Shop from "../models/shopModel.js";
 import { sendConfirmSms } from "../utils/sendSms.js";
+import { sendsmsOtp } from "../utils/otp.js";
 
 export const getAppointments = async (req, res) => {
   try {
@@ -46,17 +47,10 @@ export const createAppointment = async (req, res) => {
           res.status(200).json({ type: "success", data: appointment })
         );
     });
-
-    sendConfirmSms(
-      shopUser.number.substring(3, shopUser.number.length),
-      shopUser.number.substring(0, 3),
-      "Check your Appointment Request someone book a new appointment"
-    );
-    sendConfirmSms(
-      requestBody.phone.substring(3, requestBody.phone.length),
-      requestBody.phone.substring(0, 3),
-      "Congratulations your appointment request has been successfully submitted"
-    );
+    sendsmsOtp({
+      number: shopUser.number,
+      message: `Check your Appointment Request someone book a new appointment`,
+    });
   } catch (error) {
     console.log(error);
     res.status(404).json({ type: "error", message: error.message });
